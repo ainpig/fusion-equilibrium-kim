@@ -1,0 +1,55 @@
+{
+  "note": "T3 chain: the G1 members plus six whole-shot boundary + LCFS-Ip transformers (cdsg 2, cds 4) taking the whole flux weight of the cdsg and cds groups.",
+  "g1": {
+    "members": [
+      {
+        "name": "oxcdg2jacrl_s1234",
+        "args": "--ext --weights jacobian --seed 1234 --ctx --cdsg --cdsg-columns 41 --epochs 70 --ramp-weight 3 --scalar-weights 1,1,1,1,1,1,3"
+      },
+      {
+        "name": "oxcdcg2jacrl_s7",
+        "args": "--ext --weights jacobian --seed 7 --ctx --cds --cds-columns 41 --cdsg --cdsg-columns 41 --epochs 70 --ramp-weight 3 --scalar-weights 1,1,1,1,1,1,3"
+      }
+    ],
+    "group": "cdsg"
+  },
+  "transformer": {
+    "args": "--epochs 30 --seed 1 --width 1024 --pre-blocks 3 --post-blocks 3 --attn-width 768 --layers 6 --heads 12 --ffn 2048 --batch-shots 6 --lr 1e-4 --warmup 3000 --dropout 0.02 --ctx --trunk-lr 0.1 --layer-scale 1e-4 --freeze-epochs 3 --diff-weight 0.5",
+    "final_epoch": 22,
+    "boundary": "--epochs 8 --save-epoch 8 --seed 1 --width 1024 --pre-blocks 3 --post-blocks 3 --attn-width 768 --layers 6 --heads 12 --ffn 2048 --batch-shots 6 --dropout 0.02 --ctx --layer-scale 1e-4 --lr 1e-5 --warmup 600 --bnd-weight 200 --ip-weight 100",
+    "lcfs_points": {
+      "K": 32
+    },
+    "replace": [
+      {
+        "source": "oxcdg2jac_s1234",
+        "group": "cdsg"
+      },
+      {
+        "source": "oxcdcg2jac_s7",
+        "group": "cdsg"
+      },
+      {
+        "source": "xcd2gram_s4001",
+        "group": "cds"
+      },
+      {
+        "source": "xcd2jac_s1234",
+        "group": "cds"
+      },
+      {
+        "source": "xcd2jacli_s1234",
+        "group": "cds"
+      },
+      {
+        "source": "xcd2jac_s7",
+        "group": "cds"
+      }
+    ],
+    "group_share": {
+      "cdsg": 1.0,
+      "cds": 1.0
+    }
+  },
+  "name": "v2"
+}

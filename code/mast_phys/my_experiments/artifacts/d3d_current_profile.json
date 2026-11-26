@@ -1,0 +1,11 @@
+{
+  "alpha": 0.5,
+  "beta": 0.75,
+  "gamma": 0.5,
+  "fit_r2_J": 0.5809,
+  "r0_d3d": 1.6368749141693115,
+  "n_shots": 150,
+  "n_frames": 4669,
+  "n_points": 4956826,
+  "fitted_on": "DIII-D efit_psirz via the Grad-Shafranov operator; no MAST data"
+}

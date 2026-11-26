@@ -1,0 +1,7 @@
+{
+  "flux_recipe": "recipes/mast_phys_flux.json",
+  "scalar_recipe": "recipes/mast_phys.json",
+  "smooth_ms": 20,
+  "q95_ms": 20,
+  "beta_ms": 0
+}

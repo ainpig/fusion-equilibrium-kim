@@ -1,0 +1,101 @@
+{
+  "note": "T4 chain: the v2 stages (G1 members, boundary labels) with whole-shot transformers in cdsg (6, incl. the two li-tail ones from the G1 members), cds (5), dprod (2) and xd (1), each warm-started from its member and fine-tuned with the boundary-sensitivity and LCFS-Ip terms; 2/3 of each group's flux weight; composition: li = mean of the T4, T2, T3 and self-trained chains' li, q95 / betaN from the self-trained chain.",
+  "g1": {
+    "members": [
+      {
+        "name": "oxcdg2jacrl_s1234",
+        "args": "--ext --weights jacobian --seed 1234 --ctx --cdsg --cdsg-columns 41 --epochs 70 --ramp-weight 3 --scalar-weights 1,1,1,1,1,1,3"
+      },
+      {
+        "name": "oxcdcg2jacrl_s7",
+        "args": "--ext --weights jacobian --seed 7 --ctx --cds --cds-columns 41 --cdsg --cdsg-columns 41 --epochs 70 --ramp-weight 3 --scalar-weights 1,1,1,1,1,1,3"
+      }
+    ],
+    "group": "cdsg"
+  },
+  "transformer": {
+    "args": "--epochs 30 --seed 1 --width 1024 --pre-blocks 3 --post-blocks 3 --attn-width 768 --layers 6 --heads 12 --ffn 2048 --batch-shots 6 --lr 1e-4 --warmup 3000 --dropout 0.02 --ctx --trunk-lr 0.1 --layer-scale 1e-4 --freeze-epochs 3 --diff-weight 0.5",
+    "final_epoch": 22,
+    "boundary": "--epochs 8 --save-epoch 8 --seed 1 --width 1024 --pre-blocks 3 --post-blocks 3 --attn-width 768 --layers 6 --heads 12 --ffn 2048 --batch-shots 6 --dropout 0.02 --ctx --layer-scale 1e-4 --lr 1e-5 --warmup 600 --bnd-weight 200 --ip-weight 100",
+    "lcfs_points": {
+      "K": 32
+    },
+    "replace": [
+      {
+        "source": "oxcdg2jac_s1234",
+        "group": "cdsg"
+      },
+      {
+        "source": "oxcdcg2jac_s7",
+        "group": "cdsg"
+      },
+      {
+        "source": "oxcdcg2jac_s1234",
+        "group": "cdsg"
+      },
+      {
+        "source": "oxcdg2jac_s7",
+        "group": "cdsg"
+      },
+      {
+        "source": "oxcdg2jacrl_s1234",
+        "group": "cdsg",
+        "init": "members_g1",
+        "extra": "--scalar-weights 1,1,1,1,1,1,3 --ramp-weight 3"
+      },
+      {
+        "source": "oxcdcg2jacrl_s7",
+        "group": "cdsg",
+        "init": "members_g1",
+        "extra": "--scalar-weights 1,1,1,1,1,1,3 --ramp-weight 3"
+      },
+      {
+        "source": "xcd2jac_s7",
+        "group": "cds"
+      },
+      {
+        "source": "xcd2gram_s4001",
+        "group": "cds"
+      },
+      {
+        "source": "xcd2jac_s1234",
+        "group": "cds"
+      },
+      {
+        "source": "xcd2jacli_s1234",
+        "group": "cds"
+      },
+      {
+        "source": "xcd2gram_s4002",
+        "group": "cds"
+      },
+      {
+        "source": "dgram_s4001",
+        "group": "dprod"
+      },
+      {
+        "source": "djac_s1234",
+        "group": "dprod"
+      },
+      {
+        "source": "xdgram_s4001",
+        "group": "xd"
+      }
+    ],
+    "group_share": {
+      "cdsg": 0.6666666666666666,
+      "cds": 0.6666666666666666,
+      "dprod": 0.6666666666666666,
+      "xd": 0.6666666666666666
+    }
+  },
+  "composition": {
+    "mode": "li_mean",
+    "chains": {
+      "t2": "recipes/v2.json",
+      "t3": "recipes/v3_t3.json"
+    },
+    "self_training": "nm1.adapt run (pseudo weight 1, ramp weight 1)"
+  },
+  "name": "v4"
+}

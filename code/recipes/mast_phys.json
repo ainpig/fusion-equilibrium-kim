@@ -1,0 +1,23 @@
+{
+  "candidate": "mast_phys",
+  "mast_q95_physical": true,
+  "mast_settings": {
+    "q95_limited_fix": true,
+    "betan_limited_fill": true,
+    "q95_limited_fill": true,
+    "betan_diverted_blend": 0.5,
+    "q95_diverted_blend": 0.5,
+    "axis_from_baseline": true
+  },
+  "steps": 600,
+  "batches": {
+    "mast_seed_batch_shots": 32,
+    "mast_force_batch_shots": 48,
+    "mast_temporal_batch_shots": 18,
+    "mast_final_batch_shots": 72,
+    "mast_final_batch_frames": 8192
+  },
+  "runs": 1,
+  "stable_sampler": true,
+  "inner_wall_gap_m": 0.018
+}
